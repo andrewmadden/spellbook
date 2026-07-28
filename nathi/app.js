@@ -18,6 +18,7 @@ let sortMode = 'level';
 let preparedOnly = false;
 let activeSchools = new Set();
 let searchQuery = '';
+let expandedCards = new Set();
 let maxPrepared = 0;
 
 function calcMaxPrepared(cfg) {
@@ -224,6 +225,7 @@ function createSpellCard(spell) {
   const isPrepared = isCantrip || preparedSet.has(spell.name);
   card.className = `spell-card ${schoolClass}`;
   if (isPrepared) card.classList.add('prepared');
+  if (expandedCards.has(spell.name)) card.classList.add('expanded');
 
   const badgeText = isCantrip ? spell.school : `${levelLabel(spell.level)} ${spell.school}`;
 
@@ -260,6 +262,11 @@ function createSpellCard(spell) {
   card.addEventListener('click', (e) => {
     if (e.target.classList.contains('prepare-btn')) return;
     card.classList.toggle('expanded');
+    if (card.classList.contains('expanded')) {
+      expandedCards.add(spell.name);
+    } else {
+      expandedCards.delete(spell.name);
+    }
   });
 
   if (!isCantrip) {
