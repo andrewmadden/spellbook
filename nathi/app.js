@@ -1,12 +1,3 @@
-const SPELL_SLOTS = [
-  { level: 1, label: '1st', total: 4 },
-  { level: 2, label: '2nd', total: 3 },
-  { level: 3, label: '3rd', total: 3 },
-  { level: 4, label: '4th', total: 3 },
-  { level: 5, label: '5th', total: 2 },
-  { level: 6, label: '6th', total: 1 },
-];
-
 const SCHOOL_COLORS = {
   Abjuration: 'abjuration',
   Conjuration: 'conjuration',
@@ -18,17 +9,84 @@ const SCHOOL_COLORS = {
   Transmutation: 'transmutation',
 };
 
+let config = {};
+let spellSlots = [];
 let spells = [];
 let preparedSet = new Set();
-let slotsUsed = SPELL_SLOTS.map(() => 0);
+let slotsUsed = [];
 let sortMode = 'level';
 let preparedOnly = false;
 let activeSchools = new Set();
 let searchQuery = '';
+let maxPrepared = 0;
+
+function calcMaxPrepared(cfg) {
+  let total = 0;
+  for (const cls of cfg.classes) {
+    if (cls.name === 'Wizard') {
+      total += cfg.intModifier + cls.level;
+    } else if (cls.name === 'Artificer') {
+      total += Math.max(1, cfg.intModifier + Math.floor(cls.level / 2));
+    } else if (['Cleric', 'Druid', 'Paladin'].includes(cls.name)) {
+      total += cfg.intModifier + cls.level;
+    }
+  }
+  return total;
+}
+
+function calcSpellSlots(cfg) {
+  let casterLevel = 0;
+  for (const cls of cfg.classes) {
+    if (cls.name === 'Artificer') {
+      casterLevel += Math.ceil(cls.level / 2);
+    } else if (['Wizard', 'Cleric', 'Druid', 'Bard', 'Sorcerer'].includes(cls.name)) {
+      casterLevel += cls.level;
+    } else if (['Paladin', 'Ranger'].includes(cls.name)) {
+      casterLevel += Math.floor(cls.level / 2);
+    }
+  }
+  const table = [
+    [],
+    [2],
+    [3],
+    [4, 2],
+    [4, 3],
+    [4, 3, 2],
+    [4, 3, 3],
+    [4, 3, 3, 1],
+    [4, 3, 3, 2],
+    [4, 3, 3, 3, 1],
+    [4, 3, 3, 3, 2],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 2, 1, 1],
+  ];
+  const slots = table[Math.min(casterLevel, 20)] || [];
+  const labels = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
+  return slots.map((total, i) => ({ level: i + 1, label: labels[i], total }));
+}
+
+function preparedCount() {
+  return spells.filter(s => s.level > 0 && preparedSet.has(s.name)).length;
+}
 
 async function loadData() {
-  const spellsRes = await fetch('spells.json');
+  const [spellsRes, configRes] = await Promise.all([
+    fetch('spells.json'),
+    fetch('config.json'),
+  ]);
   spells = await spellsRes.json();
+  config = await configRes.json();
+  maxPrepared = calcMaxPrepared(config);
+  spellSlots = calcSpellSlots(config);
+  slotsUsed = spellSlots.map(() => 0);
 
   const hashPrepared = loadPreparedFromHash();
   if (hashPrepared) {
@@ -77,14 +135,31 @@ async function resetPrepared() {
   const preparedRes = await fetch('prepared.json');
   const preparedData = await preparedRes.json();
   preparedSet = new Set(preparedData.prepared);
+  renderPreparedCounter();
   renderSpellGrid();
+}
+
+function renderSubtitle() {
+  const el = document.querySelector('.subtitle');
+  const parts = config.classes.map(c => {
+    const sub = c.subclass ? ` (${c.subclass})` : '';
+    return `${c.name} ${c.level}${sub}`;
+  });
+  el.textContent = parts.join(' / ');
+}
+
+function renderPreparedCounter() {
+  const el = document.getElementById('prepared-counter');
+  const count = preparedCount();
+  el.textContent = `${count} / ${maxPrepared} prepared`;
+  el.classList.toggle('over-limit', count > maxPrepared);
 }
 
 function renderSlotTracker() {
   const tracker = document.getElementById('slot-tracker');
   tracker.innerHTML = '';
 
-  SPELL_SLOTS.forEach((slot, slotIndex) => {
+  spellSlots.forEach((slot, slotIndex) => {
     const group = document.createElement('div');
     group.className = 'slot-group';
 
@@ -145,10 +220,12 @@ function levelLabel(level) {
 function createSpellCard(spell) {
   const card = document.createElement('div');
   const schoolClass = `school-${SCHOOL_COLORS[spell.school]}`;
+  const isCantrip = spell.level === 0;
+  const isPrepared = isCantrip || preparedSet.has(spell.name);
   card.className = `spell-card ${schoolClass}`;
-  if (preparedSet.has(spell.name)) card.classList.add('prepared');
+  if (isPrepared) card.classList.add('prepared');
 
-  const badgeText = spell.level === 0 ? spell.school : `${levelLabel(spell.level)} ${spell.school}`;
+  const badgeText = isCantrip ? spell.school : `${levelLabel(spell.level)} ${spell.school}`;
 
   let tagsHtml = '';
   if (spell.ritual) tagsHtml += '<span class="spell-tag ritual">Ritual</span>';
@@ -157,6 +234,11 @@ function createSpellCard(spell) {
   let componentsHtml = '';
   if (spell.components) {
     componentsHtml = `<div class="spell-components">${spell.components}</div>`;
+  }
+
+  let prepareHtml = '';
+  if (!isCantrip) {
+    prepareHtml = `<button class="prepare-btn">${preparedSet.has(spell.name) ? 'Unprepare' : 'Prepare'}</button>`;
   }
 
   card.innerHTML = `
@@ -172,7 +254,7 @@ function createSpellCard(spell) {
     ${componentsHtml}
     <div class="spell-tags">${tagsHtml}</div>
     <div class="spell-description">${spell.description}</div>
-    <button class="prepare-btn">${preparedSet.has(spell.name) ? 'Unprepare' : 'Prepare'}</button>
+    ${prepareHtml}
   `;
 
   card.addEventListener('click', (e) => {
@@ -180,23 +262,29 @@ function createSpellCard(spell) {
     card.classList.toggle('expanded');
   });
 
-  card.querySelector('.prepare-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (preparedSet.has(spell.name)) {
-      preparedSet.delete(spell.name);
-    } else {
-      preparedSet.add(spell.name);
-    }
-    savePrepared();
-    renderSpellGrid();
-  });
+  if (!isCantrip) {
+    card.querySelector('.prepare-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (preparedSet.has(spell.name)) {
+        preparedSet.delete(spell.name);
+      } else {
+        preparedSet.add(spell.name);
+      }
+      savePrepared();
+      renderPreparedCounter();
+      renderSpellGrid();
+    });
+  }
 
   return card;
 }
 
 function getFilteredSpells() {
   return spells.filter(spell => {
-    if (preparedOnly && !preparedSet.has(spell.name)) return false;
+    if (preparedOnly) {
+      const isPrepared = spell.level === 0 || preparedSet.has(spell.name);
+      if (!isPrepared) return false;
+    }
     if (activeSchools.size > 0 && !activeSchools.has(spell.school)) return false;
     if (searchQuery && !spell.name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
@@ -292,7 +380,7 @@ function initControls() {
   });
 
   document.getElementById('reset-slots').addEventListener('click', () => {
-    slotsUsed = SPELL_SLOTS.map(() => 0);
+    slotsUsed = spellSlots.map(() => 0);
     renderSlotTracker();
   });
 
@@ -308,6 +396,8 @@ function initControls() {
 async function init() {
   initTheme();
   await loadData();
+  renderSubtitle();
+  renderPreparedCounter();
   renderSlotTracker();
   renderSchoolFilters();
   initControls();
