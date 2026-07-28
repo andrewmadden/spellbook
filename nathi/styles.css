@@ -380,10 +380,23 @@ header h1 {
   margin-bottom: 0.3rem;
 }
 
-.spell-card .spell-tags {
+.spell-card .spell-classes {
   display: flex;
   gap: 0.4rem;
   margin-bottom: 0.3rem;
+}
+
+.spell-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.spell-properties {
+  display: flex;
+  gap: 0.4rem;
+  margin-left: auto;
 }
 
 .spell-tag {
@@ -402,6 +415,34 @@ header h1 {
 .spell-tag.concentration {
   color: #e8c84a;
   background: #e8c84a22;
+}
+
+.class-tag {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.class-tag.class-wizard {
+  color: #589df6;
+  background: #589df622;
+}
+
+.class-tag.class-artificer {
+  color: #e8c84a;
+  background: #e8c84a22;
+}
+
+[data-theme="parchment"] .class-tag.class-wizard {
+  color: #2a62a8;
+  background: #2a62a818;
+}
+
+[data-theme="parchment"] .class-tag.class-artificer {
+  color: #8a6a12;
+  background: #8a6a1218;
 }
 
 .spell-card .spell-description {
@@ -426,7 +467,6 @@ header h1 {
   background: var(--bg-elevated);
   color: var(--text-muted);
   cursor: pointer;
-  margin-top: 0.4rem;
   transition: background 0.15s;
 }
 

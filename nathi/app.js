@@ -19,20 +19,20 @@ let preparedOnly = false;
 let activeSchools = new Set();
 let searchQuery = '';
 let expandedCards = new Set();
-let maxPrepared = 0;
+let maxPreparedPerClass = {};
 
-function calcMaxPrepared(cfg) {
-  let total = 0;
+function calcMaxPreparedPerClass(cfg) {
+  const limits = {};
   for (const cls of cfg.classes) {
     if (cls.name === 'Wizard') {
-      total += cfg.intModifier + cls.level;
+      limits[cls.name] = cfg.intModifier + cls.level;
     } else if (cls.name === 'Artificer') {
-      total += Math.max(1, cfg.intModifier + Math.floor(cls.level / 2));
+      limits[cls.name] = Math.max(1, cfg.intModifier + Math.floor(cls.level / 2));
     } else if (['Cleric', 'Druid', 'Paladin'].includes(cls.name)) {
-      total += cfg.intModifier + cls.level;
+      limits[cls.name] = cfg.intModifier + cls.level;
     }
   }
-  return total;
+  return limits;
 }
 
 function calcSpellSlots(cfg) {
@@ -74,8 +74,28 @@ function calcSpellSlots(cfg) {
   return slots.map((total, i) => ({ level: i + 1, label: labels[i], total }));
 }
 
-function preparedCount() {
-  return spells.filter(s => s.level > 0 && preparedSet.has(s.name)).length;
+function preparedCountPerClass() {
+  const counts = {};
+  for (const className of Object.keys(maxPreparedPerClass)) {
+    counts[className] = 0;
+  }
+  const deferred = [];
+  for (const spell of spells) {
+    if (spell.level === 0 || !preparedSet.has(spell.name)) continue;
+    const eligible = (spell.classes || []).filter(c => c in counts);
+    if (eligible.length === 1) {
+      counts[eligible[0]]++;
+    } else if (eligible.length > 1) {
+      deferred.push(eligible);
+    }
+  }
+  for (const eligible of deferred) {
+    const best = eligible.reduce((a, b) =>
+      (maxPreparedPerClass[a] - counts[a]) >= (maxPreparedPerClass[b] - counts[b]) ? a : b
+    );
+    counts[best]++;
+  }
+  return counts;
 }
 
 async function loadData() {
@@ -85,7 +105,7 @@ async function loadData() {
   ]);
   spells = await spellsRes.json();
   config = await configRes.json();
-  maxPrepared = calcMaxPrepared(config);
+  maxPreparedPerClass = calcMaxPreparedPerClass(config);
   spellSlots = calcSpellSlots(config);
   slotsUsed = spellSlots.map(() => 0);
 
@@ -151,9 +171,16 @@ function renderSubtitle() {
 
 function renderPreparedCounter() {
   const el = document.getElementById('prepared-counter');
-  const count = preparedCount();
-  el.textContent = `${count} / ${maxPrepared} prepared`;
-  el.classList.toggle('over-limit', count > maxPrepared);
+  const counts = preparedCountPerClass();
+  const parts = [];
+  let anyOver = false;
+  for (const [cls, max] of Object.entries(maxPreparedPerClass)) {
+    const count = counts[cls] || 0;
+    parts.push(`${cls}: ${count}/${max}`);
+    if (count > max) anyOver = true;
+  }
+  el.textContent = parts.join(' | ') + ' prepared';
+  el.classList.toggle('over-limit', anyOver);
 }
 
 function renderSlotTracker() {
@@ -238,6 +265,13 @@ function createSpellCard(spell) {
     componentsHtml = `<div class="spell-components">${spell.components}</div>`;
   }
 
+  let classTagsHtml = '';
+  if (spell.classes && spell.classes.length > 0) {
+    classTagsHtml = spell.classes.map(c =>
+      `<span class="class-tag class-${c.toLowerCase()}">${c}</span>`
+    ).join('');
+  }
+
   let prepareHtml = '';
   if (!isCantrip) {
     prepareHtml = `<button class="prepare-btn">${preparedSet.has(spell.name) ? 'Unprepare' : 'Prepare'}</button>`;
@@ -254,9 +288,12 @@ function createSpellCard(spell) {
       <span>${spell.duration}</span>
     </div>
     ${componentsHtml}
-    <div class="spell-tags">${tagsHtml}</div>
+    <div class="spell-classes">${classTagsHtml}</div>
     <div class="spell-description">${spell.description}</div>
-    ${prepareHtml}
+    <div class="spell-card-footer">
+      ${prepareHtml}
+      <div class="spell-properties">${tagsHtml}</div>
+    </div>
   `;
 
   card.addEventListener('click', (e) => {
