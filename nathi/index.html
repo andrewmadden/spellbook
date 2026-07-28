@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nathi's Spellbook</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Nathi's Spellbook</h1>
+    <p class="subtitle">Artificer 1 / Wizard 11 — Order of Scribes</p>
+    <div id="slot-tracker"></div>
+    <button id="reset-slots">Reset Slots</button>
+  </header>
+
+  <div class="controls">
+    <div class="controls-row">
+      <label for="sort-select">Sort:</label>
+      <select id="sort-select">
+        <option value="level">Level</option>
+        <option value="alpha">Alphabetical</option>
+        <option value="school">School</option>
+      </select>
+
+      <button id="prepared-toggle">Prepared Only</button>
+
+      <input type="text" id="search-input" placeholder="Search spells...">
+    </div>
+    <div id="school-filters"></div>
+  </div>
+
+  <main id="spell-grid"></main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
