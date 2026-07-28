@@ -4,32 +4,134 @@
   box-sizing: border-box;
 }
 
+/* Dark theme (PhpStorm-style greys) */
+:root {
+  --bg-primary: #2b2b2b;
+  --bg-secondary: #313335;
+  --bg-elevated: #3c3f41;
+  --bg-input: #45494a;
+  --border: #4d4d4d;
+  --border-hover: #5e6060;
+  --text-primary: #bababa;
+  --text-heading: #d4d4d4;
+  --text-muted: #808080;
+  --text-dim: #606060;
+  --accent: #589df6;
+  --accent-bg: #589df622;
+  --prepared-glow: rgba(88, 157, 246, 0.25);
+  --tag-bg: #3c3f41;
+  --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Parchment light theme */
+[data-theme="parchment"] {
+  --bg-primary: #f4e8c1;
+  --bg-secondary: #ecdcab;
+  --bg-elevated: #e6d49b;
+  --bg-input: #ecdcab;
+  --border: #c4a96a;
+  --border-hover: #a8894a;
+  --text-primary: #3b2e1a;
+  --text-heading: #2a1f0e;
+  --text-muted: #6b5638;
+  --text-dim: #8a7452;
+  --accent: #7b3f00;
+  --accent-bg: #7b3f0018;
+  --prepared-glow: rgba(123, 63, 0, 0.25);
+  --tag-bg: #e0d09a;
+  --font-body: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+}
+
+/* Parchment school color overrides (darker for contrast on light bg) */
+[data-theme="parchment"] .school-abjuration { border-color: #2a62a8; color: #2a62a8; }
+[data-theme="parchment"] .school-abjuration.active { background: #2a62a818; }
+[data-theme="parchment"] .school-conjuration { border-color: #1a7a72; color: #1a7a72; }
+[data-theme="parchment"] .school-conjuration.active { background: #1a7a7218; }
+[data-theme="parchment"] .school-divination { border-color: #5a5a6a; color: #5a5a6a; }
+[data-theme="parchment"] .school-divination.active { background: #5a5a6a18; }
+[data-theme="parchment"] .school-enchantment { border-color: #a8326a; color: #a8326a; }
+[data-theme="parchment"] .school-enchantment.active { background: #a8326a18; }
+[data-theme="parchment"] .school-evocation { border-color: #b83a1a; color: #b83a1a; }
+[data-theme="parchment"] .school-evocation.active { background: #b83a1a18; }
+[data-theme="parchment"] .school-illusion { border-color: #7a3aaa; color: #7a3aaa; }
+[data-theme="parchment"] .school-illusion.active { background: #7a3aaa18; }
+[data-theme="parchment"] .school-necromancy { border-color: #3a7a32; color: #3a7a32; }
+[data-theme="parchment"] .school-necromancy.active { background: #3a7a3218; }
+[data-theme="parchment"] .school-transmutation { border-color: #8a6a12; color: #8a6a12; }
+[data-theme="parchment"] .school-transmutation.active { background: #8a6a1218; }
+
+[data-theme="parchment"] .school-header.school-abjuration { color: #2a62a8; }
+[data-theme="parchment"] .school-header.school-conjuration { color: #1a7a72; }
+[data-theme="parchment"] .school-header.school-divination { color: #5a5a6a; }
+[data-theme="parchment"] .school-header.school-enchantment { color: #a8326a; }
+[data-theme="parchment"] .school-header.school-evocation { color: #b83a1a; }
+[data-theme="parchment"] .school-header.school-illusion { color: #7a3aaa; }
+[data-theme="parchment"] .school-header.school-necromancy { color: #3a7a32; }
+[data-theme="parchment"] .school-header.school-transmutation { color: #8a6a12; }
+
+[data-theme="parchment"] .spell-tag.ritual { color: #1a7a72; background: #1a7a7218; }
+[data-theme="parchment"] .spell-tag.concentration { color: #8a6a12; background: #8a6a1218; }
+
+[data-theme="parchment"] .slot-pip { border-color: #7b3f00; background: #7b3f00; }
+[data-theme="parchment"] .slot-pip:hover { border-color: #a05500; }
+[data-theme="parchment"] .spell-card.prepared .prepare-btn {
+  background: var(--accent-bg);
+  color: var(--text-heading);
+  border-color: var(--accent);
+}
+[data-theme="parchment"] #prepared-toggle.active {
+  background: var(--accent-bg);
+  color: var(--text-heading);
+  border-color: var(--accent);
+}
+
 body {
-  background: #1a1a2e;
-  color: #e0e0e0;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
   padding: 1rem 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  transition: background 0.3s, color 0.3s;
 }
 
 header {
   text-align: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #2a2a4a;
+  border-bottom: 1px solid var(--border);
 }
 
 header h1 {
   font-size: 1.8rem;
-  color: #f0f0f0;
+  color: var(--text-heading);
   margin-bottom: 0.25rem;
 }
 
 .subtitle {
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 1rem;
+}
+
+/* Theme Toggle */
+#theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  z-index: 100;
+  transition: background 0.15s;
+}
+
+#theme-toggle:hover {
+  background: var(--bg-input);
 }
 
 /* Spell Slot Tracker */
@@ -49,7 +151,7 @@ header h1 {
 
 .slot-label {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--text-muted);
   margin-right: 0.25rem;
   min-width: 2rem;
 }
@@ -58,8 +160,8 @@ header h1 {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid #6a6aff;
-  background: #6a6aff;
+  border: 2px solid var(--accent);
+  background: var(--accent);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
@@ -69,13 +171,15 @@ header h1 {
 }
 
 .slot-pip:hover {
-  border-color: #8a8aff;
+  border-color: #6aadff;
 }
 
-#reset-slots {
-  background: #2a2a4a;
-  color: #aaa;
-  border: 1px solid #3a3a5a;
+#reset-slots,
+#reset-prepared,
+#share-prepared {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   padding: 0.3rem 0.8rem;
   border-radius: 4px;
   cursor: pointer;
@@ -83,16 +187,18 @@ header h1 {
   transition: background 0.15s;
 }
 
-#reset-slots:hover {
-  background: #3a3a5a;
-  color: #e0e0e0;
+#reset-slots:hover,
+#reset-prepared:hover,
+#share-prepared:hover {
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
 /* Controls */
 .controls {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #2a2a4a;
+  border-bottom: 1px solid var(--border);
 }
 
 .controls-row {
@@ -105,22 +211,22 @@ header h1 {
 
 .controls-row label {
   font-size: 0.85rem;
-  color: #aaa;
+  color: var(--text-muted);
 }
 
 #sort-select {
-  background: #2a2a4a;
-  color: #e0e0e0;
-  border: 1px solid #3a3a5a;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
   padding: 0.4rem 0.6rem;
   border-radius: 4px;
   font-size: 0.85rem;
 }
 
 #prepared-toggle {
-  background: #2a2a4a;
-  color: #aaa;
-  border: 1px solid #3a3a5a;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
   cursor: pointer;
@@ -129,15 +235,15 @@ header h1 {
 }
 
 #prepared-toggle.active {
-  background: #4a4a8a;
-  color: #e0e0e0;
-  border-color: #6a6aff;
+  background: var(--accent-bg);
+  color: var(--text-heading);
+  border-color: var(--accent);
 }
 
 #search-input {
-  background: #2a2a4a;
-  color: #e0e0e0;
-  border: 1px solid #3a3a5a;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
   padding: 0.4rem 0.6rem;
   border-radius: 4px;
   font-size: 0.85rem;
@@ -146,7 +252,7 @@ header h1 {
 }
 
 #search-input::placeholder {
-  color: #666;
+  color: var(--text-dim);
 }
 
 #school-filters {
@@ -169,7 +275,7 @@ header h1 {
   opacity: 1;
 }
 
-/* School Colors */
+/* School Colors (dark theme defaults) */
 .school-abjuration { border-color: #4a9eff; color: #4a9eff; }
 .school-abjuration.active { background: #4a9eff22; }
 .school-conjuration { border-color: #4ecdc4; color: #4ecdc4; }
@@ -197,9 +303,9 @@ header h1 {
 .level-header {
   grid-column: 1 / -1;
   font-size: 1.1rem;
-  color: #aaa;
+  color: var(--text-muted);
   padding: 0.5rem 0 0.25rem;
-  border-bottom: 1px solid #2a2a4a;
+  border-bottom: 1px solid var(--border);
   margin-top: 0.5rem;
 }
 
@@ -209,8 +315,8 @@ header h1 {
 
 /* Spell Cards */
 .spell-card {
-  background: #22223a;
-  border: 1px solid #2a2a4a;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.75rem;
   cursor: pointer;
@@ -219,20 +325,20 @@ header h1 {
 }
 
 .spell-card:hover {
-  border-color: #3a3a6a;
+  border-color: var(--border-hover);
 }
 
 .spell-card.prepared {
-  box-shadow: 0 0 8px rgba(106, 106, 255, 0.3);
-  border-top-color: #3a3a6a;
-  border-right-color: #3a3a6a;
-  border-bottom-color: #3a3a6a;
+  box-shadow: 0 0 8px var(--prepared-glow);
+  border-top-color: var(--border-hover);
+  border-right-color: var(--border-hover);
+  border-bottom-color: var(--border-hover);
 }
 
 .spell-card .spell-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #f0f0f0;
+  color: var(--text-heading);
   margin-bottom: 0.3rem;
   display: flex;
   justify-content: space-between;
@@ -251,14 +357,14 @@ header h1 {
   display: flex;
   gap: 0.75rem;
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-muted);
   margin-bottom: 0.3rem;
   flex-wrap: wrap;
 }
 
 .spell-card .spell-components {
   font-size: 0.7rem;
-  color: #777;
+  color: var(--text-dim);
   font-style: italic;
   margin-bottom: 0.3rem;
 }
@@ -273,8 +379,8 @@ header h1 {
   font-size: 0.65rem;
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
-  background: #2a2a4a;
-  color: #aaa;
+  background: var(--tag-bg);
+  color: var(--text-muted);
 }
 
 .spell-tag.ritual {
@@ -290,11 +396,11 @@ header h1 {
 .spell-card .spell-description {
   display: none;
   font-size: 0.8rem;
-  color: #bbb;
+  color: var(--text-primary);
   line-height: 1.5;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid #2a2a4a;
+  border-top: 1px solid var(--border);
 }
 
 .spell-card.expanded .spell-description {
@@ -305,29 +411,29 @@ header h1 {
   font-size: 0.7rem;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  border: 1px solid #3a3a5a;
-  background: #2a2a4a;
-  color: #aaa;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
   cursor: pointer;
   margin-top: 0.4rem;
   transition: background 0.15s;
 }
 
 .spell-card .prepare-btn:hover {
-  background: #3a3a5a;
+  background: var(--bg-input);
 }
 
 .spell-card.prepared .prepare-btn {
-  background: #4a4a8a;
-  color: #e0e0e0;
-  border-color: #6a6aff;
+  background: var(--accent-bg);
+  color: var(--text-heading);
+  border-color: var(--accent);
 }
 
 .school-header {
   grid-column: 1 / -1;
   font-size: 1.1rem;
   padding: 0.5rem 0 0.25rem;
-  border-bottom: 1px solid #2a2a4a;
+  border-bottom: 1px solid var(--border);
   margin-top: 0.5rem;
 }
 

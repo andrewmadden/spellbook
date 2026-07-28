@@ -27,13 +27,57 @@ let activeSchools = new Set();
 let searchQuery = '';
 
 async function loadData() {
-  const [spellsRes, preparedRes] = await Promise.all([
-    fetch('spells.json'),
-    fetch('prepared.json'),
-  ]);
+  const spellsRes = await fetch('spells.json');
   spells = await spellsRes.json();
+
+  const hashPrepared = loadPreparedFromHash();
+  if (hashPrepared) {
+    preparedSet = hashPrepared;
+    savePrepared();
+    history.replaceState(null, '', location.pathname);
+  } else {
+    const saved = localStorage.getItem('spellbook-prepared');
+    if (saved) {
+      preparedSet = new Set(JSON.parse(saved));
+    } else {
+      const preparedRes = await fetch('prepared.json');
+      const preparedData = await preparedRes.json();
+      preparedSet = new Set(preparedData.prepared);
+    }
+  }
+}
+
+function loadPreparedFromHash() {
+  const hash = location.hash.slice(1);
+  if (!hash.startsWith('p=')) return null;
+  try {
+    const decoded = atob(hash.slice(2));
+    return new Set(JSON.parse(decoded));
+  } catch {
+    return null;
+  }
+}
+
+function sharePrepared() {
+  const encoded = btoa(JSON.stringify([...preparedSet]));
+  const url = `${location.origin}${location.pathname}#p=${encoded}`;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('share-prepared');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Share Prepared'; }, 2000);
+  });
+}
+
+function savePrepared() {
+  localStorage.setItem('spellbook-prepared', JSON.stringify([...preparedSet]));
+}
+
+async function resetPrepared() {
+  localStorage.removeItem('spellbook-prepared');
+  const preparedRes = await fetch('prepared.json');
   const preparedData = await preparedRes.json();
   preparedSet = new Set(preparedData.prepared);
+  renderSpellGrid();
 }
 
 function renderSlotTracker() {
@@ -143,6 +187,7 @@ function createSpellCard(spell) {
     } else {
       preparedSet.add(spell.name);
     }
+    savePrepared();
     renderSpellGrid();
   });
 
@@ -206,6 +251,29 @@ function renderSpellGrid() {
   }
 }
 
+function initTheme() {
+  const toggle = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('spellbook-theme');
+  if (saved === 'parchment') {
+    document.documentElement.setAttribute('data-theme', 'parchment');
+    toggle.textContent = '☽';
+  } else {
+    toggle.textContent = '☀';
+  }
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'parchment') {
+      document.documentElement.removeAttribute('data-theme');
+      toggle.textContent = '☀';
+      localStorage.setItem('spellbook-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'parchment');
+      toggle.textContent = '☽';
+      localStorage.setItem('spellbook-theme', 'parchment');
+    }
+  });
+}
+
 function initControls() {
   document.getElementById('sort-select').addEventListener('change', (e) => {
     sortMode = e.target.value;
@@ -227,9 +295,18 @@ function initControls() {
     slotsUsed = SPELL_SLOTS.map(() => 0);
     renderSlotTracker();
   });
+
+  document.getElementById('reset-prepared').addEventListener('click', () => {
+    resetPrepared();
+  });
+
+  document.getElementById('share-prepared').addEventListener('click', () => {
+    sharePrepared();
+  });
 }
 
 async function init() {
+  initTheme();
   await loadData();
   renderSlotTracker();
   renderSchoolFilters();
