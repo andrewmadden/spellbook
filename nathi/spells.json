@@ -290,6 +290,21 @@
     ]
   },
   {
+    "name": "Inflict Wounds",
+    "level": 1,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "Make a melee spell attack against a creature you can reach. On a hit, the target takes 3d10 necrotic damage.<br><br><strong>At Higher Levels.</strong> When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
+    "ritual": false,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
     "name": "Magic Missile",
     "level": 1,
     "school": "Evocation",
@@ -388,6 +403,21 @@
     "duration": "Until Dispelled",
     "components": "gold dust worth 25+ GP, which the spell consumes",
     "description": "<p>You touch a closed door, window, gate, container, or hatch and magically lock it for the duration. This lock can\u2019t be unlocked by any nonmagical means. You and any creatures you designate when you cast the spell can open and close the object despite the lock. You can also set a password that, when spoken within 5 feet of the object, unlocks it for 1 minute.</p>",
+    "ritual": false,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
+    "name": "Blindness/Deafness",
+    "level": 2,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "30 ft",
+    "duration": "1 Minute",
+    "components": "V",
+    "description": "You can blind or deafen a foe. Choose one creature that you can see within range to make a Constitution saving throw. If it fails, the target is either blinded or deafened (your choice) for the duration. At the end of each of its turns, the target can make a Constitution saving throw. On a success, the spell ends.<br><br><strong>At Higher Levels.</strong> When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
     "ritual": false,
     "concentration": false,
     "classes": [
@@ -635,6 +665,21 @@
     ]
   },
   {
+    "name": "Feign Death",
+    "level": 3,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "1 Hour",
+    "components": "V, S, M (a pinch of graveyard dirt)",
+    "description": "You touch a willing creature and put it into a cataleptic state that is indistinguishable from death. For the spell's duration, or until you use an action to touch the target and dismiss the spell, the target appears dead to all outward inspection and to spells used to determine the target's status. The target is blinded and incapacitated, and its speed drops to 0. The target has resistance to all damage except psychic damage. If the target is diseased or poisoned when you cast the spell, or becomes diseased or poisoned while under the spell's effect, the disease and poison have no effect until the spell ends.",
+    "ritual": true,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
     "name": "Fireball",
     "level": 3,
     "school": "Evocation",
@@ -703,6 +748,21 @@
     "duration": "Instantaneous",
     "components": "",
     "description": "<p class=\"Core-Styles_Core-Body\">You sacrifice some of your health to mend another creature\u2019s injuries. You take 4d8 necrotic damage, which can\u2019t be reduced in any way, and one creature of your choice that you can see within range regains a number of hit points equal to twice the necrotic damage you take.</p>\r\n<p class=\"Core-Styles_Core-Body\"><span class=\"Serif-Character-Style_Inline-Subhead-Serif\"><strong>At Higher Levels.</strong>&nbsp;</span>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd.</p>",
+    "ritual": false,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
+    "name": "Revivify",
+    "level": 3,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "Instantaneous",
+    "components": "V, S, M (diamonds worth 300 gp, which the spell consumes)",
+    "description": "You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts.",
     "ritual": false,
     "concentration": false,
     "classes": [
@@ -890,6 +950,21 @@
     ]
   },
   {
+    "name": "Shadow of Moil",
+    "level": 4,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "Self",
+    "duration": "Concentration, up to 1 Minute",
+    "components": "V, S, M (an undead eyeball encased in a gem worth at least 150 gp)",
+    "description": "Flame-like shadows wreathe your body until the spell ends, causing you to become heavily obscured to others. The shadows turn dim light within 10 feet of you into darkness, and bright light in the same area to dim light.<br><br>Until the spell ends, you have resistance to radiant damage. In addition, whenever a creature within 10 feet of you hits you with an attack, the shadows lash out at that creature, dealing it 2d8 necrotic damage.",
+    "ritual": false,
+    "concentration": true,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
     "name": "Summon Aberration",
     "level": 4,
     "school": "Conjuration",
@@ -929,6 +1004,21 @@
     "components": "",
     "description": "<p>You mentally contact a demigod, the spirit of a long-dead sage, or some other knowledgeable entity from another plane. Contacting this otherworldly intelligence can break your mind. When you cast this spell, make a DC 15 Intelligence saving throw. On a successful save, you can ask the entity up to five questions. You must ask your questions before the spell ends. The DM answers each question with one word, such as &ldquo;yes,&rdquo; &ldquo;no,&rdquo; &ldquo;maybe,&rdquo; &ldquo;never,&rdquo; &ldquo;irrelevant,&rdquo; or &ldquo;unclear&rdquo; (if the entity doesn\u2019t know the answer to the question). If a one-word answer would be misleading, the DM might instead offer a short phrase as an answer.</p>\r\n<p>On a failed save, you take 6d6 Psychic damage and have the Incapacitated condition until you finish a Long Rest. A Greater Restoration spell cast on you ends this effect.</p>",
     "ritual": true,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
+    "name": "Contagion",
+    "level": 5,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "Touch",
+    "duration": "7 Days",
+    "components": "V, S",
+    "description": "Your touch inflicts disease. Make a melee spell attack against a creature within your reach. On a hit, you afflict the creature with a disease of your choice from the list below.<br><br>At the end of each of the target's turns, it must make a Constitution saving throw. After failing three of these saving throws, the disease's effects last for the duration, and the creature stops making these saves. After succeeding on three of these saving throws, the creature recovers from the disease, and the spell ends.<br><br><strong>Blinding Sickness.</strong> Disadvantage on Wisdom checks and saving throws, and is blinded.<br><strong>Filth Fever.</strong> Disadvantage on Strength checks, saving throws, and attack rolls that use Strength.<br><strong>Flesh Rot.</strong> Disadvantage on Charisma checks and vulnerability to all damage.<br><strong>Mindfire.</strong> Disadvantage on Intelligence checks and saving throws, and behaves as if under the effects of the confusion spell during combat.<br><strong>Seizure.</strong> Disadvantage on Dexterity checks, saving throws, and attack rolls that use Dexterity.<br><strong>Slimy Doom.</strong> Disadvantage on Constitution checks and saving throws. Whenever the creature takes damage, it is stunned until the end of its next turn.",
+    "ritual": false,
     "concentration": false,
     "classes": [
       "Wizard"
@@ -988,6 +1078,21 @@
     "duration": "Instantaneous",
     "components": "a broken bone and a square of black silk",
     "description": "<p class=\"Core-Styles_Core-Body\">You send ribbons of negative energy at one creature you can see within range. Unless the target is undead, it must make a Constitution saving throw, taking 5d12 necrotic damage on a failed save, or half as much damage on a successful one. A target killed by this damage rises up as a zombie at the start of your next turn. The zombie pursues whatever creature it can see that is closest to it. Statistics for the zombie are in the&nbsp;<a href=\"https://www.dndbeyond.com/compendium/rules/mm/monsters-z#Zombies\"><em><span class=\"Serif-Character-Style_Italic-Serif\">Monst</span><span class=\"Serif-Character-Style_Italic-Serif\">er Manual</span></em></a>.</p>\r\n<p class=\"Core-Styles_Core-Body\">If you target an undead with this spell, the target doesn\u2019t make a saving throw. Instead, roll 5d12. The target gains half the total as temporary hit points.</p>",
+    "ritual": false,
+    "concentration": false,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
+    "name": "Raise Dead",
+    "level": 5,
+    "school": "Necromancy",
+    "castingTime": "1 Hour",
+    "range": "Touch",
+    "duration": "Instantaneous",
+    "components": "V, S, M (a diamond worth at least 500 gp, which the spell consumes)",
+    "description": "You return a dead creature you touch to life, provided that it has been dead no longer than 10 days. If the creature's soul is both willing and at liberty to rejoin the body, the creature returns to life with 1 hit point.<br><br>This spell also neutralizes any poisons and cures nonmagical diseases that affected the creature at the time it died. This spell doesn't, however, remove magical diseases, curses, or similar effects; if these aren't first removed prior to casting the spell, they take effect when the creature returns to life.<br><br>This spell can't return an undead creature to life. The spell closes all mortal wounds, but it doesn't restore missing body parts. If the creature is lacking body parts or organs integral for its survival \u2014 its head, for instance \u2014 the spell automatically fails.<br><br>Coming back from the dead is an ordeal. The target takes a \u22124 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears.",
     "ritual": false,
     "concentration": false,
     "classes": [
@@ -1140,6 +1245,21 @@
     "description": "<p>An immobile, shimmering barrier appears in a 10-foot Emanation around you and remains for the duration.</p>\r\n<p>Any spell of level 5 or lower cast from outside the barrier can\u2019t affect anything within it. Such a spell can target creatures and objects within the barrier, but the spell has no effect on them. Similarly, the area within the barrier is excluded from areas of effect created by such spells.</p>\r\n<p><strong><em>Using a Higher-Level Spell Slot.</em></strong> The barrier blocks spells of 1 level higher for each spell slot level above 6.</p>",
     "ritual": false,
     "concentration": true,
+    "classes": [
+      "Wizard"
+    ]
+  },
+  {
+    "name": "Harm",
+    "level": 6,
+    "school": "Necromancy",
+    "castingTime": "1 Action",
+    "range": "60 ft",
+    "duration": "Instantaneous",
+    "components": "V, S",
+    "description": "You unleash a virulent disease on a creature that you can see within range. The target must make a Constitution saving throw. On a failed save, it takes 14d6 necrotic damage, or half as much damage on a successful save. The damage can't reduce the target's hit points below 1. If the target fails the saving throw, its hit point maximum is reduced for 1 hour by an amount equal to the necrotic damage it took. Any effect that removes a disease allows a creature's hit point maximum to return to normal before that time passes.",
+    "ritual": false,
+    "concentration": false,
     "classes": [
       "Wizard"
     ]
