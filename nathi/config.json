@@ -2,8 +2,15 @@
   "name": "Nathi",
   "race": "Firbolg",
   "classes": [
-    { "name": "Artificer", "level": 1 },
-    { "name": "Wizard", "level": 11, "subclass": "Order of Scribes" }
+    {
+      "name": "Artificer",
+      "level": 1
+    },
+    {
+      "name": "Wizard",
+      "level": 12,
+      "subclass": "Order of Scribes"
+    }
   ],
   "intModifier": 5
 }
