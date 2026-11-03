@@ -5,6 +5,7 @@
     "Disguise Self",
     "Faerie Fire",
     "Feather Fall",
+    "Invisibility",
     "Magic Missile",
     "Misty Step",
     "Rope Trick",
@@ -16,10 +17,8 @@
     "Life Transference",
     "Sending",
     "Greater Invisibility",
-    "Polymorph",
     "Bigby's Hand",
     "Hold Monster",
-    "Telekinesis",
     "Teleportation Circle"
   ]
 }
